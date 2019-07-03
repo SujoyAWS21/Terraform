@@ -1,0 +1,6 @@
+aws_access_key = " "
+aws_secret_key = " "
+private_key_path = "C:/DevOps/GitHub/Terraform_projects/_keys/file.pem"
+bucket_name =   "bl-web"
+environment_tag =   "dev"
+billing_code_tag    =   "ACCT2310202"
