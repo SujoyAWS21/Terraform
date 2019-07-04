@@ -29,6 +29,7 @@ module "vpc" {
   #.names - returns a list of AZs 
   azs = slice(data.aws_availability_zones.available.names, 0, var.subnet_count)
 
+#ToDo in future we'll generate a custom cidr from the base VPC Cidr. [InCustom Data Sources]
   private_subnets = ["10.0.1.0/24", "10.0.3.0/24"]
   public_subnets  = ["10.0.0.0/24", "10.0.2.0/24"]
 
@@ -39,4 +40,8 @@ module "vpc" {
     Environment = "dev"
   }
 }
+#terraform init --var-file="..\terraform.tfvars"
+#terraform plan --var-file="..\terraform.tfvars" -out terraform.tfplan
+#terraform apply terraform.tfplan
 
+#https://github.com/ned1313/Deep-Dive-Terraform/tree/master/module2

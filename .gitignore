@@ -7,4 +7,8 @@
 **/*.tfplan
 debuglog.txt
 **/terraform_plugins/**
+<<<<<<< HEAD
+=======
+**/.terraform/**
+>>>>>>> 879502932ea55aa26b60adc93011cab3403bdfd7
 **/.vscode/**
