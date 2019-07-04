@@ -9,21 +9,22 @@ foreach($line in $content){
         $values.Add($line.Split(' ')[0],$line.Split(' ')[2])
     }
 }
+
 #Install the AWS PowerShell if you don't already have it
-#-Scope CurrentUser
 if(-not (Get-Module AWSPowerShell -ErrorAction SilentlyContinue)){
     Install-Module AWSPowerShell -Force
 }
+
 #Set the AWS Credentials
 Set-AWSCredential -SecretKey $values.aws_secret_key.Replace('"','') `
-     -AccessKey $values.aws_access_key.Replace('"','')
+-AccessKey $values.aws_access_key.Replace('"','')
 
 #Set the default region as applicable
 $region = "us-west-2"
 Set-DefaultAWSRegion -Region $region
 
 #Get the VPC and AZs
-$vpc = Get-EC2Vpc
+$vpc = Get-EC2Vpc -Filter @{Name="cidr"; Values="10.0.0.0/16"} #Get-EC2Vpc
 $azs = Get-EC2AvailabilityZone
 
 #Create two new subnets in the third AZ
@@ -63,3 +64,4 @@ $JimmysResources.Add("ElasticIP",$eip.AllocationId)
 Write-Output $JimmysResources
 
 
+#https://github.com/ned1313/Deep-Dive-Terraform/tree/master/module2

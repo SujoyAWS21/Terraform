@@ -43,3 +43,5 @@ module "vpc" {
 #terraform init --var-file="..\terraform.tfvars"
 #terraform plan --var-file="..\terraform.tfvars" -out terraform.tfplan
 #terraform apply terraform.tfplan
+
+#https://github.com/ned1313/Deep-Dive-Terraform/tree/master/module2

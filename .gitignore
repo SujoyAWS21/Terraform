@@ -7,5 +7,5 @@
 **/*.tfplan
 debuglog.txt
 **/terraform_plugins/**
-**/.terraform/
+**/.terraform/**
 **/.vscode/**
