@@ -26,12 +26,11 @@ Set-DefaultAWSRegion -Region $region
 #Get the VPC and AZs
 $vpc = Get-EC2Vpc -Filter @{Name="cidr"; Values="10.0.0.0/16"} #Get-EC2Vpc
 $azs = Get-EC2AvailabilityZone
-
 #Create two new subnets in the third AZ
-$privateSubnet = New-EC2Subnet -AvailabilityZone $azs[2].ZoneName `
-     -CidrBlock "10.0.5.0/24" -VpcId $vpc.VpcId
-$publicSubnet = New-EC2Subnet -AvailabilityZone $azs[2].ZoneName `
-     -CidrBlock "10.0.4.0/24" -VpcId $vpc.VpcId
+$privateSubnet = New-EC2Subnet -VpcId $vpc.VpcId -AvailabilityZone $azs[2].ZoneName `
+     -CidrBlock '10.0.5.0/24' 
+$publicSubnet = New-EC2Subnet -VpcId $vpc.VpcId -AvailabilityZone $azs[2].ZoneName `
+     -CidrBlock '10.0.4.0/24' 
 
 #Get the Public route table for all public subnets and associate the new public subnet
 $publicRouteTable = Get-EC2RouteTable `
