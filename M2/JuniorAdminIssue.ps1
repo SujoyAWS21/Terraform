@@ -11,9 +11,9 @@ foreach($line in $content){
 }
 
 #Install the AWS PowerShell if you don't already have it
-if(-not (Get-Module AWSPowerShell -ErrorAction SilentlyContinue)){
-    Install-Module AWSPowerShell -Force
-}
+# if(-not (Get-Module AWSPowerShell -ErrorAction SilentlyContinue)){
+#     Install-Module AWSPowerShell -Force
+# }
 
 #Set the AWS Credentials
 Set-AWSCredential -SecretKey $values.aws_secret_key.Replace('"','') `

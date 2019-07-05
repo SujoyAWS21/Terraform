@@ -6,7 +6,7 @@ variable "aws_secret_key" {}
 variable "private_key_path" {}
 
 variable "subnet_count" {
-  default = 2
+  default = 3
 }
 variable "bucket_name"{}
 variable "environment_tag" {}
