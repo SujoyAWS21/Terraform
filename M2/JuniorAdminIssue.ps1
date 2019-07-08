@@ -64,3 +64,4 @@ Write-Output $JimmysResources
 
 
 #https://github.com/ned1313/Deep-Dive-Terraform/tree/master/module2
+#https://askvoprosy.com/voprosy/how-am-i-supposed-to-get-the-owner-id-of-an-aws-market-place-ami
