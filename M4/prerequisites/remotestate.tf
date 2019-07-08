@@ -5,14 +5,17 @@
 variable "aws_access_key" {}
 variable "aws_secret_key" {}
 variable "aws_networking_bucket" {
-    default = "ddt-networking"
+    default = "ddt-networking2310202"
 }
 variable "aws_application_bucket" {
-    default = "ddt-application"
+    default = "ddt-application2310202"
 }
 variable "aws_dynamodb_table" {
     default = "ddt-tfstatelock"
 }
+#backend config will look for explicitly defined s3 credentials in the backend config 
+#then it will check for aws credentions in aws config user path 
+#it will check and path the profile that is defined there 
 variable "user_home_path" {}
 
 ##################################################################################
@@ -29,17 +32,18 @@ provider "aws" {
 # RESOURCES
 ##################################################################################
 resource "aws_dynamodb_table" "terraform_statelock" {
-  name           = "${var.aws_dynamodb_table}"
+  name           = "${var.aws_dynamodb_table}" #(Required) 
   read_capacity  = 20
   write_capacity = 20
-  hash_key       = "LockID"
+  hash_key       = "LockID" #(Required), Case sensitive
 
-  attribute {
+  attribute { #(Required) 
     name = "LockID"
-    type = "S"
+    type = "S" #string
   }
 }
 
+#Creating bucket for networking
 resource "aws_s3_bucket" "ddtnet" {
   bucket = "${var.aws_networking_bucket}"
   acl    = "private"
@@ -48,7 +52,8 @@ resource "aws_s3_bucket" "ddtnet" {
   versioning {
     enabled = true
   }
-
+#Appling policy to bucket that allows AppTeam (Sally Sue) GetObject from the bucket 
+#another Policy allows to do all actions on the bucket.
       policy = <<EOF
 {
     "Version": "2008-10-17",
@@ -62,11 +67,11 @@ resource "aws_s3_bucket" "ddtnet" {
             "Action": "s3:GetObject",
             "Resource": "arn:aws:s3:::${var.aws_networking_bucket}/*"
         },
-        {
+        { 
             "Sid": "",
             "Effect": "Allow",
             "Principal": {
-                "AWS": "${aws_iam_user.marymoe.arn}"
+                "AWS": "${aws_iam_user.marymoe.arn}" 
             },
             "Action": "s3:*",
             "Resource": [
@@ -78,7 +83,9 @@ resource "aws_s3_bucket" "ddtnet" {
 }
 EOF
 }
-
+#Doing the same thing for the AppBucket
+#Marry Moe read only access 
+#SallySue RW access 
 resource "aws_s3_bucket" "ddtapp" {
   bucket = "${var.aws_application_bucket}"
   acl    = "private"
@@ -116,20 +123,20 @@ resource "aws_s3_bucket" "ddtapp" {
 }
 EOF
 }
-
+#Creating a user
 resource "aws_iam_group" "ec2admin" {
   name = "EC2Admin"
 }
-
+#Creating Policy for this user 
 resource "aws_iam_group_policy_attachment" "ec2admin-attach" {
   group      = "${aws_iam_group.ec2admin.name}"
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
 }
-
+# Creeating IAM User Sally Sue 
 resource "aws_iam_user" "sallysue" {
   name = "sallysue"
 }
-
+# Giving RW access to Sally Sue
 resource "aws_iam_user_policy" "sallysue_rw" {
     name = "sallysue"
     user = "${aws_iam_user.sallysue.name}"
@@ -156,7 +163,12 @@ resource "aws_iam_user_policy" "sallysue_rw" {
 }
 EOF
 }
-
+#MaryMoe
+#Creating IAM User Mary Moe
+#Access Key for user Mary Moe
+#RW Policy to Networking Bucket for MMoe user
+#Group Membership
+#Dynamo DB Access 
 resource "aws_iam_user" "marymoe" {
     name = "marymoe"
 }
@@ -206,6 +218,8 @@ resource "aws_iam_group_membership" "add-ec2admin" {
   group = "${aws_iam_group.ec2admin.name}"
 }
 
+#Specilized resource to write into a local file that we specify
+#it will be used by backend configurations
 resource "local_file" "aws_keys" {
     content = <<EOF
 [default]
@@ -228,6 +242,7 @@ EOF
 ##################################################################################
 # OUTPUT
 ##################################################################################
+#output "username" {value = "${aws_iam_user.sallysue.name}"}
 
 output "sally-access-key" {
     value = "${aws_iam_access_key.sallysue.id}"
