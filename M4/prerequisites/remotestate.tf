@@ -203,7 +203,7 @@ resource "aws_iam_user_policy" "marymoe_rw" {
 }
 EOF
 }
-
+#state-lock
 resource "aws_iam_access_key" "sallysue" {
     user = "${aws_iam_user.sallysue.name}"
 }
