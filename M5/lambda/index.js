@@ -7,13 +7,16 @@ var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'}); //creating dynamoDB var 
 exports.handler = (event, context, callback) => {
     // TODO implement
         var params = {
+            //Settinga up parameters and expression to hand to dynamo DB as a query 
             ExpressionAttributeValues: {
-                ':p': {S: event.headers["querytext"]}, //return 1 item from the table 
+                //query text header that we want to tun against dynamo DB which should return 1 item from a table
+                ':p': {S: event.headers["querytext"]}, //return 1 item from the table (storing that value in p)
             },
+            //
             KeyConditionExpression: 'ProjectEnvironment = :p', //primayKey = p
             TableName: 'ddt-datasource'
         };
-
+    //execution of the query and passing to it params that we created 
     ddb.query(params, function(err, data) {
         if (err) {
             console.log("Error", err);

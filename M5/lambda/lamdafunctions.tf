@@ -12,6 +12,7 @@ variable "aws_dynamodb_table" {
 
 variable "accountId" {} 
 #your account associated with aws
+//https://www.terraform.io/docs/providers/aws/d/caller_identity.html
 
 ##################################################################################
 # PROVIDERS
@@ -28,7 +29,9 @@ data "aws_iam_group" "ec2admin" {
 }
 
 data "aws_region" "current" {
- current = true
+ //current = true
+ name = "us-west-2"
+ //provider = "aws.region"
 }
 
 ##################################################################################
@@ -67,7 +70,7 @@ resource "aws_iam_policy" "dynamodb-access" {
         {
             "Effect": "Allow",
             "Action": [
-                "dynamodb:Get*", #actions allows
+                "dynamodb:Get*", 
                 "dynamodb:query"
             ],
             "Resource": "${aws_dynamodb_table.terraform_datasource.arn}"
@@ -158,7 +161,7 @@ resource "aws_lambda_permission" "apigw_lambda" {
 resource "aws_api_gateway_deployment" "ddtdeployment" {
   depends_on = ["aws_api_gateway_integration.integration"] # explisit dependency on integration piece
 
-  rest_api_id = "${aws_api_gateway_rest_api.tddapi.id}"
+  rest_api_id = "${aws_api_gateway_rest_api.tddapi.id}" //handing rest api id
   stage_name  = "prod"
 }
 
