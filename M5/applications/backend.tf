@@ -9,3 +9,4 @@ terraform {
     dynamodb_table = "ddt-tfstatelock"
   }
 }
+

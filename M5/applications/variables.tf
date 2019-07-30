@@ -4,10 +4,11 @@ variable "network_remote_state_key" {
 }
 
 variable "network_remote_state_bucket" {
-  default = "ddt-networking"
+  default = "ddt-networking2310202"
 }
 
-variable "aws_profile" {}
+variable "aws_profile" {
+}
 
 #Web front end variables
 variable "key_name" {
@@ -32,4 +33,6 @@ variable "projectcode" {
   default = "8675309"
 }
 
-variable "url" {}
+variable "url" {
+}
+
